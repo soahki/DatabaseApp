@@ -1,6 +1,10 @@
 package IO;
 
 import java.io.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * This is the entry point to the database. Determine here which database to connect to and
@@ -11,8 +15,36 @@ public class Connector {
     private String databaseOrigin;
     private String databaseName;
 
-    public Connector() throws IOException {
+    private Connection connection;
+    private Statement statement;
+
+    public Connector() throws IOException, ClassNotFoundException, SQLException {
         new ConfigReader().read();
+
+        connect();
+
+    }
+
+    private void connect() throws ClassNotFoundException, SQLException {
+        Class.forName(databaseType);
+
+        connection = DriverManager.getConnection(databaseOrigin + databaseName);
+        statement = connection.createStatement();
+    }
+
+    public String getConfigStatus() {
+        String status = "Database type: %s\n" +
+                "Database origin: %s\n" +
+                "Database name: %s\n";
+        return String.format(status, databaseType, databaseOrigin, databaseName);
+    }
+
+    public Connection getConnection() {
+        return connection;
+    }
+
+    public Statement getStatement() {
+        return statement;
     }
 
     public String getDatabaseOrigin() {
