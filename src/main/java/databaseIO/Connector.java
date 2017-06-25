@@ -1,4 +1,4 @@
-package IO;
+package databaseIO;
 
 import java.io.*;
 import java.sql.Connection;
@@ -18,18 +18,26 @@ public class Connector {
     private Connection connection;
     private Statement statement;
 
-    public Connector() throws IOException, ClassNotFoundException, SQLException {
-        new ConfigReader().read();
+    Connector() {
+        try {
+            new ConfigReader().read();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         connect();
 
     }
 
-    private void connect() throws ClassNotFoundException, SQLException {
-        Class.forName(databaseType);
+    private void connect() {
 
-        connection = DriverManager.getConnection(databaseOrigin + databaseName);
-        statement = connection.createStatement();
+        try {
+            Class.forName(databaseType);
+            connection = DriverManager.getConnection(databaseOrigin + databaseName);
+            statement = connection.createStatement();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getConfigStatus() {
@@ -39,11 +47,11 @@ public class Connector {
         return String.format(status, databaseType, databaseOrigin, databaseName);
     }
 
-    public Connection getConnection() {
+    Connection getConnection() {
         return connection;
     }
 
-    public Statement getStatement() {
+    Statement getStatement() {
         return statement;
     }
 

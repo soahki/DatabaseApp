@@ -1,12 +1,12 @@
-import IO.Connector;
+import databaseIO.Connector;
+import databaseIO.IO;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
 public class Main {
-    public static void main(String[] args) throws IOException, SQLException, ClassNotFoundException {
-        Connector connector = new Connector();
-        System.out.println(connector.getConfigStatus());
-
+    public static void main(String[] args) throws SQLException {
+        IO io = new IO();
+        io.getTables();
     }
 }
