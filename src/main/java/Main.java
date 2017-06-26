@@ -1,6 +1,7 @@
 import databaseIO.Connector;
 import databaseIO.IO;
 import databaseIO.MetaData;
+import model.Column;
 import model.Table;
 
 import java.io.IOException;
@@ -15,7 +16,16 @@ public class Main {
 
         List<Table> tables = metaData.getTables();
         for (Table table : tables) {
-            System.out.println(table);
+            System.out.println("\n" + table.getName().toUpperCase());
+            for (Column column : metaData.getColumns(table.getName())) {
+                System.out.println("  " + column);
+            }
+        }
+
+        System.out.println("\nPRIMARY KEYS:");
+        Map<String, String> primaryKeys = metaData.getPrimaryKeys();
+        for (String table : primaryKeys.keySet()) {
+            System.out.println(table + " : " + primaryKeys.get(table));
         }
 
         /*
