@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Input/Output to database in the form of SQL statements
@@ -14,15 +16,25 @@ import java.util.List;
 public class IO {
     private Statement statement;
     private Connector connector;
+    private DatabaseMetaData metaData;
 
     public IO() {
-            connector = new Connector();
-            statement = connector.getStatement();
+        connector = new Connector();
+        statement = connector.getStatement();
+        setMetaData();
+
+    }
+
+    private void setMetaData() {
+        try {
+            metaData = connector.getConnection().getMetaData();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public List<String> getTables() throws SQLException {
         List<String> tables = new ArrayList<>();
-        DatabaseMetaData metaData = connector.getConnection().getMetaData();
         ResultSet rs = metaData.getTables(null,null , "%", null);
 
         while (rs.next()) {
@@ -30,4 +42,15 @@ public class IO {
         }
         return tables;
     }
+
+    public Map<String, String> getColumns(String tableName) throws SQLException {
+        Map<String, String> columnsMap = new HashMap<>();
+        ResultSet columnsRS = metaData.getColumns(null, null, tableName, "%");
+
+        while (columnsRS.next()) {
+            columnsMap.put(columnsRS.getString(4), columnsRS.getString(6));
+        }
+        return columnsMap;
+    }
+
 }

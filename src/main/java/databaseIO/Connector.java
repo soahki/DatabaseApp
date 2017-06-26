@@ -55,6 +55,18 @@ public class Connector {
         return statement;
     }
 
+    public void setDatabaseType(String databaseType) {
+        this.databaseType = databaseType;
+    }
+
+    public void setDatabaseOrigin(String databaseOrigin) {
+        this.databaseOrigin = databaseOrigin;
+    }
+
+    public void setDatabaseName(String databaseName) {
+        this.databaseName = databaseName;
+    }
+
     public String getDatabaseOrigin() {
         return databaseOrigin;
     }
