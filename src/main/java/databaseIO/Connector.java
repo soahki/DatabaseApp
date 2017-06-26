@@ -18,7 +18,7 @@ public class Connector {
     private Connection connection;
     private Statement statement;
 
-    Connector() {
+    public Connector() {
         try {
             new ConfigReader().read();
         } catch (IOException e) {

@@ -38,4 +38,15 @@ public class Table {
     public String getIdentifierGeneration() {
         return identifierGeneration;
     }
+
+    @Override
+    public String toString() {
+        return "Table{" +
+                "name='" + name + '\'' +
+                ", type='" + type + '\'' +
+                ", remarks='" + remarks + '\'' +
+                ", identifier='" + identifier + '\'' +
+                ", identifierGeneration='" + identifierGeneration + '\'' +
+                '}';
+    }
 }
