@@ -19,6 +19,26 @@ public class Column {
         this.foreignKeyReference = foreignKeyReference;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public boolean isPrimaryKey() {
+        return isPrimaryKey;
+    }
+
+    public boolean isForeignKey() {
+        return isForeignKey;
+    }
+
+    public String getForeignKeyReference() {
+        return foreignKeyReference;
+    }
+
     @Override
     public String toString() {
         return "Column{" +

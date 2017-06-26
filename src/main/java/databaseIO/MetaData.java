@@ -10,6 +10,7 @@ import java.util.*;
 
 public class MetaData {
     private DatabaseMetaData metaData;
+    private String dbName;
     private Map<String, String> primaryKeys = new HashMap<>();
 
     public MetaData(Connector connector) {
@@ -22,6 +23,7 @@ public class MetaData {
 
     private void setMetaData(Connector connector) throws SQLException {
         metaData = connector.getConnection().getMetaData();
+        dbName = connector.getCatalog();
         setPrimaryKeys();
     }
 
@@ -39,8 +41,14 @@ public class MetaData {
         }
     }
 
-    public Map<Table, List<Column>> getMetaData() {
+    public Map<Table, List<Column>> getMetaDataMap() throws SQLException {
         Map<Table, List<Column>> metaDataMap = new HashMap<>();
+        for (Table table : getTables()) {
+            metaDataMap.put(table, new ArrayList<>());
+            for (Column column : getColumns(table.getName())) {
+                metaDataMap.get(table).add(column);
+            }
+        }
         return metaDataMap;
     }
 
@@ -75,7 +83,7 @@ public class MetaData {
             while (foreignKeyRS.next()){
                 isForeignKey = Objects.equals(foreignKeyRS.getString(4), name);
                 if(isForeignKey) {
-                    foreignKeyReference = foreignKeyRS.getString(7) + " : " + foreignKeyRS.getString(8);
+                    foreignKeyReference = foreignKeyRS.getString(4) + "(" + foreignKeyRS.getString(3) + ")";
                     break;
                 }
             }
@@ -88,5 +96,40 @@ public class MetaData {
 
     public Map<String, String> getPrimaryKeys() {
         return primaryKeys;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        String data = "No meta data available.";
+        try {
+            Map<Table, List<Column>> map = getMetaDataMap();
+            sb.append("Database: " + dbName);
+            for (Table table : map.keySet()) {
+                sb.append("\nTable: " + table.getName() + "\n");
+                sb.append("Columns: ");
+                List<Column> columns = map.get(table);
+                for (int i = 0; i < columns.size(); i++) {
+                    sb.append(columns.get(i).getName() + " " + columns.get(i).getType());
+                    if (columns.get(i).isPrimaryKey()) {
+                        sb.append(" <PRIMARY KEY>");
+                    }
+                    if (columns.get(i).isForeignKey()) {
+                        sb.append(" <FOREIGN KEY: " + columns.get(i).getForeignKeyReference() + ">");
+                    }
+                    if (i < (columns.size() - 1)) {
+                        sb.append(" | ");
+                    } else {
+                        sb.append("\n");
+                    }
+                }
+                data = sb.toString();
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return data;
     }
 }

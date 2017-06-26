@@ -4,7 +4,6 @@ import databaseIO.MetaData;
 import model.Column;
 import model.Table;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +13,9 @@ public class Main {
         IO io = new IO();
         MetaData metaData = new MetaData(new Connector());
 
+        System.out.println(metaData);
+
+        /*
         List<Table> tables = metaData.getTables();
         for (Table table : tables) {
             System.out.println("\n" + table.getName().toUpperCase());
@@ -27,6 +29,7 @@ public class Main {
         for (String table : primaryKeys.keySet()) {
             System.out.println(table + " : " + primaryKeys.get(table));
         }
+        */
 
         /*
         List<String> tables = io.getTables();

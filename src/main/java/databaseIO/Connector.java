@@ -40,6 +40,10 @@ public class Connector {
         }
     }
 
+    public String getCatalog() throws SQLException {
+        return connection.getCatalog();
+    }
+
     public String getConfigStatus() {
         String status = "Database type: %s\n" +
                 "Database origin: %s\n" +
