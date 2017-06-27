@@ -1,4 +1,4 @@
-package databaseIO;
+package io;
 
 import java.io.*;
 import java.sql.Connection;
@@ -10,7 +10,7 @@ import java.sql.Statement;
  * This is the entry point to the database. Determine here which database to connect to and
  * its type.
  */
-public class Connector {
+class Connector {
     private String databaseType;
     private String databaseOrigin;
     private String databaseName;
@@ -18,7 +18,7 @@ public class Connector {
     private Connection connection;
     private Statement statement;
 
-    public Connector() {
+    Connector() {
         try {
             new ConfigReader().read();
         } catch (IOException e) {
@@ -40,11 +40,11 @@ public class Connector {
         }
     }
 
-    public String getCatalog() throws SQLException {
+    String getCatalog() throws SQLException {
         return connection.getCatalog();
     }
 
-    public String getConfigStatus() {
+    String getConfigStatus() {
         String status = "Database type: %s\n" +
                 "Database origin: %s\n" +
                 "Database name: %s\n";
@@ -59,27 +59,27 @@ public class Connector {
         return statement;
     }
 
-    public void setDatabaseType(String databaseType) {
+    void setDatabaseType(String databaseType) {
         this.databaseType = databaseType;
     }
 
-    public void setDatabaseOrigin(String databaseOrigin) {
+    void setDatabaseOrigin(String databaseOrigin) {
         this.databaseOrigin = databaseOrigin;
     }
 
-    public void setDatabaseName(String databaseName) {
+    void setDatabaseName(String databaseName) {
         this.databaseName = databaseName;
     }
 
-    public String getDatabaseOrigin() {
+    String getDatabaseOrigin() {
         return databaseOrigin;
     }
 
-    public String getDatabaseName() {
+    String getDatabaseName() {
         return databaseName;
     }
 
-    public String getDatabaseType() {
+    String getDatabaseType() {
         return databaseType;
     }
 
